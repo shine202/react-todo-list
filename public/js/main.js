@@ -19032,33 +19032,22 @@ module.exports = require('./lib/React');
 
 },{"./lib/React":53}],159:[function(require,module,exports){
 var React = require('react');
-
 var ListItem = require('./ListItem.jsx');
-
-var ingredients = [{
-    "id": 1,
-    "text": "ham"
-}, {
-    "id": 2,
-    "text": "cheese"
-}, {
-    "id": 3,
-    "text": "patatoes"
-}];
 
 var List = React.createClass({
     displayName: 'List',
 
 
     render: function () {
-        var listItems = ingredients.map(function (item) {
-            return React.createElement(ListItem, { key: item.id, ingredient: item.text });
-        });
+
+        var createItem = function (text, index) {
+            return React.createElement(ListItem, { key: index + text, text: text });
+        };
 
         return React.createElement(
             'ul',
             null,
-            listItems
+            this.props.items.map(createItem)
         );
     }
 });
@@ -19079,7 +19068,7 @@ var ListItem = React.createClass({
             React.createElement(
                 'h4',
                 null,
-                this.props.ingredient
+                this.props.text
             )
         );
     }
@@ -19089,10 +19078,99 @@ module.exports = ListItem;
 
 },{"react":158}],161:[function(require,module,exports){
 var React = require('react');
+//var ReactDom = require('react-dom');
+var List = require('./List.jsx');
+
+var ListManager = React.createClass({
+    displayName: 'ListManager',
+
+    //Called once in the Component life cycle - an initializer
+    getInitialState: function () {
+        return { items: [], newItemText: '' };
+    },
+    onChange: function (e) {
+        //Update the state property every time a keystroke is typed
+        this.setState({ newItemText: e.target.value });
+    },
+    handleSubmit: function (e) {
+        //Stop hte button from getting clicks since we are using form onSubmit
+        e.preventDefault();
+
+        //Grab the current list of itmes
+        var currentItems = this.state.items;
+
+        //Add the new item to the list
+        currentItems.push(this.state.newItemText);
+
+        //Update the main item list with the new list and clear the newItemText
+        this.setState({ items: currentItems, newItemText: '' });
+    },
+
+    render: function () {
+
+        var divStyle = {
+            marginTop: 10
+        };
+
+        var headingStyle = {};
+
+        if (this.props.headingColor) {
+            headingStyle.background = this.props.headingColor;
+        }
+
+        return React.createElement(
+            'div',
+            { style: divStyle, className: 'col-sm-4' },
+            React.createElement(
+                'div',
+                { className: 'panel panel-primary' },
+                React.createElement(
+                    'div',
+                    { style: headingStyle, className: 'panel-heading' },
+                    React.createElement(
+                        'h3',
+                        null,
+                        this.props.title
+                    )
+                ),
+                React.createElement(
+                    'div',
+                    { className: 'row panel-body' },
+                    React.createElement(
+                        'form',
+                        { onSubmit: this.handleSubmit },
+                        React.createElement(
+                            'div',
+                            { className: 'col-sm-9' },
+                            React.createElement('input', { className: 'form-control', onChange: this.onChange, value: this.state.newItemText })
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'col-sm-2' },
+                            React.createElement(
+                                'button',
+                                { className: 'btn btn-primary' },
+                                'Add'
+                            )
+                        )
+                    )
+                ),
+                React.createElement(List, { items: this.state.items })
+            )
+        );
+    }
+});
+
+module.exports = ListManager;
+
+},{"./List.jsx":159,"react":158}],162:[function(require,module,exports){
+var React = require('react');
 var ReactDom = require('react-dom');
 
-var List = require('./components/List.jsx');
+var ListManager = require('./components/ListManager.jsx');
 
-ReactDom.render(React.createElement(List, null), document.getElementById('ingredients'));
+ReactDom.render(React.createElement(ListManager, { title: 'Ingredients' }), document.getElementById('ingredients'));
+ReactDom.render(React.createElement(ListManager, { title: 'ToDO' }), document.getElementById('todo'));
+ReactDom.render(React.createElement(ListManager, { title: 'Christmas', headingColor: '#b31217' }), document.getElementById('christmas'));
 
-},{"./components/List.jsx":159,"react":158,"react-dom":29}]},{},[161]);
+},{"./components/ListManager.jsx":161,"react":158,"react-dom":29}]},{},[162]);
