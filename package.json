@@ -1,0 +1,26 @@
+{
+  "name": "react-skeleton",
+  "version": "1.0.0",
+  "description": "This is a react app skeleton for learning the react framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shkelqim1410/react-skeleton.git"
+  },
+  "author": "Shkelqim1410",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Shkelqim1410/react-skeleton/issues"
+  },
+  "homepage": "https://github.com/Shkelqim1410/react-skeleton#readme",
+  "dependencies": {
+    "babel-preset-react": "^6.5.0",
+    "babelify": "^7.2.0",
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7",
+    "watchify": "^3.7.0"
+  }
+}
